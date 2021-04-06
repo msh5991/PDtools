@@ -88,7 +88,7 @@ class IgorPDPlotter(PDPlotter):
             f.write('WAVES/D '+prefix+'_x '+prefix+'_Eform '+prefix+'_Eah\n')
             f.write('BEGIN\n')
             waves = {}
-            for entry in pd.qhull_entries:
+            for entry in pd.stable_entries:
                 x = pd.pd_coords(entry.composition)[0]
                 Eform = pd.get_form_energy_per_atom(entry)
                 Eah = pd.get_e_above_hull(entry)
