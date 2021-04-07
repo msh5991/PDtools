@@ -17,11 +17,11 @@ class IgorPDPlotter(PDPlotter):
             **plotkwargs,
         )
     
-    def igorplot_enghalpy(self, pd, target_pressure, itx):
+    def igorplot_enthalpy(self, pd, target_pressure, itx):
         """
         plot
-            (1) formation enthalpy vs pressure
-            (2) enthalpy above convex hull vs pressure
+        (1) formation enthalpy vs pressure
+        (2) enthalpy above convex hull vs pressure
         by Igor Pro
 
         Args:
@@ -47,13 +47,13 @@ class IgorPDPlotter(PDPlotter):
                     f.write('X AppendToGraph ' + i + '_Eform vs pressure\n')
                 f.write('X ModifyGraph gfSize=18,marker=19,msize=3,lsize=1,gFont="Arial",tick=2,mirror=1,btLen=8,zero(left)=3,ZisZ=1,standoff=0\n')
                 f.write('X Label bottom "pressure (GPa)"\n')
-                f.write('X Label left "Formation Enthalpy (eV)"\n')
+                f.write('X Label left "Formation enthalpy (eV/atom)"\n')
                 f.write('X Display ' + complist[0] + '_Eah vs pressure\n')
                 for i in complist[1:]:
                     f.write('X AppendToGraph ' + i + '_Eah vs pressure\n')
                 f.write('X ModifyGraph gfSize=18,marker=19,msize=3,lsize=1,gFont="Arial",tick=2,mirror=1,btLen=8,zero(left)=3,ZisZ=1,standoff=0\n')
                 f.write('X Label bottom "pressure (GPa)"\n')
-                f.write('X Label left "Enthalpy above convex hull (eV)"\n')
+                f.write('X Label left "Enthalpy above convex hull (eV/atom)"\n')
         
         with open(itx, 'r') as f:
             lines = f.readlines()
@@ -69,7 +69,7 @@ class IgorPDPlotter(PDPlotter):
 
     def igorplot_2Dpd(self, pd, itx, prefix):
         """
-        plot 2-dimensional phase diagram by Igor Pro
+        plot two-dimensional phase diagram by Igor Pro
 
         Args:
             pd : PhaseDiagram object (defined in the pymatgen.analysis.phase_diagram module)
@@ -78,38 +78,57 @@ class IgorPDPlotter(PDPlotter):
         """
         
         if pd.dim != 2:
-            raise Exception('The Dimension of PhaseDiagram is not equal to 2.')
+            raise Exception('The dimension of phasediagram is not equal to 2.')
         
         with open(itx, 'w') as f:
             complist = []
             f.write('IGOR\n')
 
-            # entries on convex hull
-            f.write('WAVES/D '+prefix+'_x '+prefix+'_Eform '+prefix+'_Eah\n')
+            # plot stable entries
+            f.write('WAVES/D '+prefix+'_st_x '+prefix+'_st_Eform '+prefix+'_st_Eah\n')
             f.write('BEGIN\n')
-            waves = {}
+            waves = dict()
             for entry in pd.stable_entries:
                 x = pd.pd_coords(entry.composition)[0]
                 Eform = pd.get_form_energy_per_atom(entry)
                 Eah = pd.get_e_above_hull(entry)
                 text = str(x) + ' ' + str(Eform) + ' ' + str(Eah) + '\n'
                 waves[x] = text
-            print("waves",waves)
             waves_sorted = sorted(waves.items(), key=lambda x:x[0])
-            print("waves_sorted",waves_sorted)
             for w in waves_sorted:
                 f.write(w[1])
             f.write('END\n')
 
-            f.write('X Display ' + prefix +'_Eform vs ' + prefix +'_x\n')
-            f.write('X ModifyGraph gfSize=18,marker=19,msize=3,lsize=1,gFont="Arial",mode=4,tick=2,mirror=1,btLen=8,zero(left)=3,standoff=0,ZisZ=1\n')
+            f.write('X Display ' + prefix +'_st_Eform vs ' + prefix +'_st_x\n')
+            f.write('X ModifyGraph rgb('+ prefix +'_st_Eform)=(65535,0,0)\n')
+            f.write('X ModifyGraph mode('+ prefix +'_st_Eform)=4\n')
+
+            # plot unstable entries
+            f.write('WAVES/D '+prefix+'_unst_x '+prefix+'_unst_Eform '+prefix+'_unst_Eah\n')
+            f.write('BEGIN\n')
+            waves = dict()
+            for entry in pd.unstable_entries:
+                x = pd.pd_coords(entry.composition)[0]
+                Eform = pd.get_form_energy_per_atom(entry)
+                Eah = pd.get_e_above_hull(entry)
+                text = str(x) + ' ' + str(Eform) + ' ' + str(Eah) + '\n'
+                waves[x] = text
+            waves_sorted = sorted(waves.items(), key=lambda x:x[0])
+            for w in waves_sorted:
+                f.write(w[1])
+            f.write('END\n')
+
+            f.write('X AppendToGraph ' + prefix +'_unst_Eform vs ' + prefix +'_unst_x\n')
+            f.write('X ModifyGraph rgb('+ prefix +'_unst_Eform)=(0,0,65535)\n')
+            f.write('X ModifyGraph mode('+ prefix +'_unst_Eform)=3\n')
+
+            f.write('X ModifyGraph gfSize=18,marker=19,msize=3,gFont="Arial",tick=2,mirror=1,btLen=8,zero(left)=3,standoff=0,ZisZ=1\n')
             f.write('X Label bottom ""\n')
-            f.write('X Label left "Formation Enthalpy (eV)"\n')
+            f.write('X Label left "Formation enthalpy (eV/atom)"\n')
+            f.write('X Legend/C/N=text0/J/F=0/A=MC "\\s(PD_st_Eform) stable\\r\\s(PD_unst_Eform) unstable"\n')
 
-            # entries above convex hull
-
-            # labels
-            waves = {}
+            # plot labels
+            waves = dict()
             for entry in pd.all_entries:
                 x = pd.pd_coords(entry.composition)[0]
                 comp = str(entry.original_entry.composition.reduced_formula)
@@ -134,7 +153,7 @@ class IgorPDPlotter(PDPlotter):
         complist = []
         Eformlist = []
         Eahlist = []
-        print('Formation Enthalpy (eV):')
+        print('Formation enthalpy (eV):')
         for i in entries:
             e = pd.get_form_energy_per_atom(i)
             print('    '+str(i.original_entry.composition) + ' : ' + str(e))
