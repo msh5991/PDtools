@@ -15,5 +15,5 @@ The author has tested the operation in the following environment.
 - pymatgen 2020.12.31
 - Igor Pro 6.37
 
-## Licence
+## License
 PDtools is distributed under the MIT License.
