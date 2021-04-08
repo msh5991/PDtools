@@ -7,7 +7,7 @@ This utility contains the following functions:
 - Export the formation enthalpy and enthalpy above convex hull for each composition in the phase diagram to the Igor Text format, which can be opened with Igor Pro software.
 
 ## Usage
-You can try a tutorial from the [turorials](tutorial/tutorial.ipynb).
+You can try a tutorial from ['tutorial/tutorial.ipynb'](tutorial/tutorial.ipynb).
 
 ## Required Packages
 The author has tested the operation in the following environment.
