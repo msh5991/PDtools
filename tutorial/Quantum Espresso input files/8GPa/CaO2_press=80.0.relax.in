@@ -1,0 +1,45 @@
+ &control
+    calculation = 'vc-relax',
+    verbosity = 'high'
+    prefix = 'CaO2'
+    outdir = './work_presssure=80.0'
+    pseudo_dir = '../pseudo/'
+    tprnfor = .true.
+    tstress = .true.
+    nstep = 100
+ /
+ &system
+    space_group = 139,
+    origin_choice = 1,
+    a = 3.2,
+    c = 7.2,
+    nat = 2, 
+    ntyp = 2,
+    ecutwfc = 35.0,
+    ecutrho = 315.0,
+    occupations = 'smearing',
+    smearing = 'gaussian',
+    degauss = 0.01,
+ /
+ &electrons
+    mixing_beta = 0.4
+    conv_thr = 1.0d-6
+    electron_maxstep = 300
+ /
+ &ions
+ /
+ &cell
+    press = 80.0
+ /
+
+ATOMIC_SPECIES
+ Ca -1.0  Ca.pbe-nsp-van.UPF
+ O  -1.0  O.pbe-van_ak.UPF
+
+ATOMIC_POSITIONS crystal_sg
+ Ca 2b
+ O  4e  0.10864
+
+K_POINTS (automatic)
+  6 6 4 0 0 0
+

@@ -1,0 +1,47 @@
+ &control
+    calculation = 'vc-relax',
+    verbosity = 'high'
+    prefix = 'O2alpha'
+    outdir = './work_press=300.0'
+    pseudo_dir = '../pseudo/'
+    tprnfor = .true.
+    tstress = .true.
+    nstep = 100
+ /
+ &system
+    ibrav = -12,
+    a = 4.068549,
+    b = 2.254428,
+    c = 4.297007,
+    cosAC = -0.632556,
+    uniqueb = .TRUE.,
+    nat =  4, 
+    ntyp = 1,
+    ecutwfc = 35.0,
+    ecutrho = 315.0,
+    occupations = 'smearing',
+    smearing = 'gaussian',
+    degauss = 0.01
+ /
+ &electrons
+    mixing_beta = 0.4
+    conv_thr = 1.0d-6
+    electron_maxstep = 300
+ /
+ &ions
+ /
+ &cell
+    press = 300.0
+ /
+ATOMIC_SPECIES
+ O  -1.0  O.pbe-van_ak.UPF
+
+ATOMIC_POSITIONS crystal
+ O  0.089  0.000  0.153
+ O  0.589  0.500  0.153
+ O  0.411  0.500  0.847
+ O  0.911  0.000  0.847
+
+K_POINTS (automatic)
+  4 6 4 0 0 0
+
