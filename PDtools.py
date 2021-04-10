@@ -54,6 +54,7 @@ class IgorPDPlotter(PDPlotter):
                 f.write('X ModifyGraph gfSize=18,marker=19,msize=3,lsize=1,gFont="Arial",tick=2,mirror=1,btLen=8,zero(left)=3,ZisZ=1,standoff=0\n')
                 f.write('X Label bottom "pressure (GPa)"\n')
                 f.write('X Label left "Enthalpy above convex hull (eV/atom)"\n')
+                f.write('X TileWindows\n')
         
         with open(itx, 'r') as f:
             lines = f.readlines()
