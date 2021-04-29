@@ -194,19 +194,17 @@ def PWout2PD(outfiles, target_pressure, terminal_compositions):
             #read compositions
             j1 = [i for i, line in enumerate(lines) if 'ATOMIC_POSITIONS' in line]
             j2 = [i for i, line in enumerate(lines) if 'End final coordinates' in line]
-            atm = []
-            natm = []
+            atm = dict()
             for i in range(j1[-1]+1, j2[0]):
-                a = lines[i].split()[0]
+                a = re.sub(r'[0-9]+', '', lines[i].split()[0])
                 if a in atm:
-                    natm[atm.index(a)] += 1
+                    atm[a] += 1
                 else:
-                    atm.append(a)
-                    natm.append(1)
+                    atm[a] = 1
             comp = ''
-            for i in range(len(atm)):
-                comp += atm[i]
-                comp += str(natm[i])
+            for i in atm.keys():
+                comp += i
+                comp += str(atm[i])
                 comp += ' '
 
             #read Hscf
