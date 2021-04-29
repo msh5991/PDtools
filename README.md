@@ -2,7 +2,7 @@
 PDtools is a pymatgen-based Python utility to visualize phase diagrams with Igor Pro from ab-initio structural optimization calculations under pressure performed by Quantum ESPRESSO.
 
 This utility contains the following functions:
-- Make a PhaseDiagram object (defined in pymatgen module) from the output files of vc-relax calculation performed by Quantum ESPRESSO. (The [pymatgen module](https://github.com/materialsproject/pymatgen) is used internally.)
+- Make a CompoundPhaseDiagram object (defined in the [pymatgen.analysis.phase_diagram module](https://github.com/materialsproject/pymatgen/blob/master/pymatgen/analysis/phase_diagram.py)) from the output files of vc-relax calculation performed by Quantum ESPRESSO.
 - Export a plot of phase diagram to the Igor Text format, which can be opened with Igor Pro software.
 - Export the formation enthalpy and enthalpy above convex hull for each composition in the phase diagram to the Igor Text format, which can be opened with Igor Pro software.
 
